@@ -31,7 +31,7 @@
 \begin{document}
 \maketitle
 
-\section{Principleas, Patterns and Practices of Clean Code}
+\section{Principles, Patterns and \\ Practices of Clean Code}
 
 \subsection{Clean Code}
 \paragraph{Why clean code?}
@@ -55,7 +55,7 @@ The definition of clean code on the other hand is hard to get. Here are some par
 	\item[Error handling complete] Pay attention to details and do proper error handling.
 	\item[Does one thing well] Good code is focussed on what it does and doesn't do anything else.
 	\item[Obvious] You can see the intentions of the author. There is nothing hidden behind obscure lines or complicated mathematical formulae. What is done should always feel straightforward.
-	\item[Other authors] Whenever someone needs to change something it should be easy. Furthermore it should be easy to do it right and hard to do it wrong.
+	\item[Other authors] It should be easy for anyone to change something in the code. Furthermore it should be easy to do it right and hard to do it wrong.
 	\item[Tested] It is not clean to have code without tests. Without them it is incomplete. Like a mathematical statement without proof.
 	\item[Minimal API] Whenever you could remove something from your API and were still able to do everything your code will not be clean as it contains duplication.
 	\item[Done with care] There are no (easy) improvements as the author already did all of them.
@@ -66,10 +66,10 @@ The definition of clean code on the other hand is hard to get. Here are some par
 It is important to chose names wisely as they reveal what the content actually represents. Again some important points:
 \begin{description}
 	\item[Intention-Revealing] It makes it much easier to understand and change code if you understand the intention. This may be a variable or function name just as well as a class name as well as class names used to show what it represents.
-	\item[Avoid Disinformation]\mbox{}\\[-1.5\baselineskip]
+	\item[Avoid Disinformation]\mbox{} \\ [-1.5\baselineskip]
 		\begin{itemize}
 			\item Abbreviations can be hard to see through if you're not deep into the current code.
-			\item Also differences between \code{account}, \code{theAccount} and \code{accountInfo} might be hard to understand.
+			\item It might be hard to understand differences between \code{account}, \code{theAccount} and \code{accountInfo}.
 			\item If you use accountList for an array of accounts someone else migth assume that it actually is a List and not an Array.
 			\item Use distinctive names that don't only separate by a few small characters.
 			\item Don't use \code{O} (uppercase o) as variable name as it is easily confused with \code{0} (zero). The same gose for \code{l} and \code{1}.
