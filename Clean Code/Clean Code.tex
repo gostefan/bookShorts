@@ -78,13 +78,20 @@ It is important to chose names wisely as they reveal what the content actually r
 		Don't use words like \code{variable}, \code{table}, or \code{string} for variables, tables, or strings.
 	\item[Pronounceable Names] We can read words better than abbreviations or worse first letter concatenations. It's a bad idea to use \code{ymdhmi} for year, month, date, hour, minute, second for example - rather use timestamp.
 	\item[Searchable Names] Don't use plane numbers - create constants with meaningful names and use those. It both shows intent and is searchable.
-	\item[Name length $\sim$ scope size] The length of a name (in characters) should correspond to the size of the scope it's used in.
-	\item[Avoid encodings] Don't use encodings in names: Drop type descriptions, memberPrefixes (\code{m...}, \code{m\_...}) and interface prefixes (\code{I...} - use \code{...Imp} if necessary) - this information is easily supplied by the IDE.
+	\item[Name length $\sim$ scope size] The length of names (in characters) should correspond to the size of the scope they are used in.
+	\item[Avoid encodings] Don't use encodings in names: Drop all type descriptions, memberPrefixes (\code{m...}, \code{m\_...}) and interface prefixes (\code{I...} - use \code{...Imp} if necessary) - this information is easily supplied by the IDE.
 	\item[Mental Mapping] Single letter names are only ok for loop variables \code{i}, \code{j}, or \code{k} (but not \code{l}).
 	\item[Class Names] should be a noun or noun phrase - never a verb. Avoid \code{Manager}, \code{Processor}, \code{Data}, or \code{Info}.
 	\item[Method Names] should be a verb or verb phrase - never a noun. Consider static factory methods with names for overloaded constructors to describe the arguments.
 	\item[Don't be cute] say what you mean and not what sounds cute and funny. (E.g. don't use \code{eatMyShorts} instead of \code{abort()}.)
+	\item[One Word per Concept] One high level concept should have one name. E.g. don't use \code{get}, \code{fetch} and \code{retrieve} interchangeably. Use the same word when the semantics are the same.
+	\item[Don't pun] Basically the inverse of the last one. E.g. Don't use \code{add} for adding to collections as well as adding numbers. Use two words when the semantics differ.
+	\item[Solution Domain] Your code will be read by computer scientists. So write in their terms: Name patterns, algorithms, math etc. Be technical.
+	\item[Problem Domain] If there is no typical programmer word use words that someone working in the domain recognizes. Then the programmer can get help to understand the code.
+	\item[Add Context] Only few names make sense of their own. \code{name} only tells you what is named from the context. If there is no context you might consider prefixing: \code{bookName}. Be aware that long functions may break context.
+	\item[Too much Context] Don't add too much context. E.g. only prefix address if you have to store different addresses. Shorter names are better than long ones.
 \end{description}
+If you think you have a better name for something then change the name. Most other people will be thankful.
 
 \subsection{Functions}
 
