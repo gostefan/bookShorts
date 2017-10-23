@@ -1,0 +1,141 @@
+\documentclass[a4paper, twocolumn]{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts} 
+%\usepackage{german}
+\usepackage[utf8]{inputenc}
+\usepackage{multicol}  
+\usepackage{multirow}
+%\usepackage{dsfont} 
+%\usepackage[rflt]{floatflt}  
+\usepackage{graphics}
+\usepackage{epsfig} 
+\usepackage[pdftex]{hyperref}
+\usepackage{moreverb}
+
+\usepackage[novbox]{pdfsync}
+
+% ZuFa Template laden
+% Layout by Thorben Bocheneck
+\usepackage{tbabstract}
+
+
+\title{Summary: Clean Code \\
+	\large
+	A Handbook of Agile Software Craftsmanship
+	Robert C. Martin}
+\author{Stefan Götschi}
+
+% Commands
+
+\definecolor{lightgrey}{rgb}{0.96,0.96,0.96}
+\newcommand{\code}[1]{\texttt{\color{black}{#1}}}
+\newcommand{\keyword}[1]{\textbf{\color{black}{#1}}}
+\newcommand{\example}[1]{\textbf{\medskip\colorbox{lightgrey}{\color{black}{Beispiel: #1}}}}
+
+\begin{document}
+\maketitle
+
+\section{Principleas, Patterns and Practices of Clean Code}
+
+\subsection{Clean Code}
+\paragraph{Why clean code?}
+It happens so easily - you just have to finish something and don't do it cleanly. Your code is a little messy. The next day you encounter some messy code and have to hack your feature around that part of code because you don't understand it. Afterwards the code is even messier.
+
+The problem starts if you're not able to break this cycle and your code base degrades more and more. The cost of this mess isn't visible today as it works right now. But when you need to hack more and more workarounds so the mess still works you get slowed down. This gets worse and worse to the point where you're just struggling with your code and not achieving anything anymore.
+
+Then you might consider a grand redesign. As you cannot stop adding new features for years you will have to develop the new version while still adding to the old one. So you have two teams racing each other. As this goes on it can happen that the new system also starts to be a mess and in the end you're not better off.
+
+But the fault for this is clearly with us programmers. We have schedules and deadlines of course. But in the end it's our job to deliver good quality code and not just something that works. We need to help draw up plans and schedules with project managers instead of letting them guess timelines.
+
+It is important to have your code readable as code will be read about ten times more often then changed.
+
+This is nicely summarized in the Boy Scouts rule: "Leave the campground cleaner than you found it."
+
+\paragraph{Definition}
+The definition of clean code on the other hand is hard to get. Here are some parts to it.
+\begin{description}
+	\item[Elegant] The code should be pleasing to read like a good book.
+	\item[Efficient] It's not only about speed - typically wasted cycles a sign of inelegancy, of something that should be done differently. It also inefficient code tempts for optimization that might make a mess again.
+	\item[Error handling complete] Pay attention to details and do proper error handling.
+	\item[Does one thing well] Good code is focussed on what it does and doesn't do anything else.
+	\item[Obvious] You can see the intentions of the author. There is nothing hidden behind obscure lines or complicated mathematical formulae. What is done should always feel straightforward.
+	\item[Other authors] Whenever someone needs to change something it should be easy. Furthermore it should be easy to do it right and hard to do it wrong.
+	\item[Tested] It is not clean to have code without tests. Without them it is incomplete. Like a mathematical statement without proof.
+	\item[Minimal API] Whenever you could remove something from your API and were still able to do everything your code will not be clean as it contains duplication.
+	\item[Done with care] There are no (easy) improvements as the author already did all of them.
+	\item[Without duplication] If you do one thing twice one of the two might be flawed. One might be improved and the other not while being still used.
+\end{description}
+
+\subsection{Meaningful Names}
+It is important to chose names wisely as they reveal what the content actually represents. Again some important points:
+\begin{description}
+	\item[Intention-Revealing] It makes it much easier to understand and change code if you understand the intention. This may be a variable or function name just as well as a class name as well as class names used to show what it represents.
+	\item[Avoid Disinformation]\mbox{}\\[-1.5\baselineskip]
+		\begin{itemize}
+			\item Abbreviations can be hard to see through if you're not deep into the current code.
+			\item Also differences between \code{account}, \code{theAccount} and \code{accountInfo} might be hard to understand.
+			\item If you use accountList for an array of accounts someone else migth assume that it actually is a List and not an Array.
+			\item Use distinctive names that don't only separate by a few small characters.
+			\item Don't use \code{O} (uppercase o) as variable name as it is easily confused with \code{0} (zero). The same gose for \code{l} and \code{1}.
+		\end{itemize}
+	\item[Meaningful Distinctions] Don't misspell classes (e.g. \code{clazz}), add numbers (e.g. \code{a1}, \code{a2}, ...), or add noise words (e.g. \code{...Info},  \code{...Data}) just because names clash - make a distinction between the two variables, functions, or classes as they do something else.\\
+		Don't use words like \code{variable}, \code{table}, or \code{string} for variables, tables, or strings.
+	\item[Pronounceable Names] We can read words better than abbreviations or worse first letter concatenations. It's a bad idea to use \code{ymdhmi} for year, month, date, hour, minute, second for example - rather use timestamp.
+	\item[Searchable Names] Don't use plane numbers - create constants with meaningful names and use those. It both shows intent and is searchable.
+	\item[Name length $\sim$ scope size] The length of a name (in characters) should correspond to the size of the scope it's used in.
+	\item[Avoid encodings] Don't use encodings in names: Drop type descriptions, memberPrefixes (\code{m...}, \code{m\_...}) and interface prefixes (\code{I...} - use \code{...Imp} if necessary) - this information is easily supplied by the IDE.
+	\item[Mental Mapping] Single letter names are only ok for loop variables \code{i}, \code{j}, or \code{k} (but not \code{l}).
+	\item[Class Names] should be a noun or noun phrase - never a verb. Avoid \code{Manager}, \code{Processor}, \code{Data}, or \code{Info}.
+	\item[Method Names] should be a verb or verb phrase - never a noun. Consider static factory methods with names for overloaded constructors to describe the arguments.
+	\item[Don't be cute] say what you mean and not what sounds cute and funny. (E.g. don't use \code{eatMyShorts} instead of \code{abort()}.)
+\end{description}
+
+\subsection{Functions}
+
+\subsection{Comments}
+
+\subsection{Formatting}
+
+\subsection{Objects and Data Structures}
+
+\subsection{Error Handling}
+
+\subsection{Boundaries}
+
+\subsection{Unit Tests}
+
+\subsection{Classes}
+
+
+\section{Case Studies}
+
+\subsection{Systems}
+
+\subsection{Emergence}
+
+\subsection{Concurrency}
+
+\subsection{Successive Refinement}
+
+\subsection{JUnit Internals}
+
+\subsection{Refactoring SerialDate}
+
+
+\section{Heuristics and Smells}
+
+\subsection{Comments}
+
+\subsection{Environment}
+
+\subsection{Functions}
+
+\subsection{General}
+
+\subsection{Java}
+
+\subsection{Names}
+
+\subsection{Tests}
+
+\end{document}
