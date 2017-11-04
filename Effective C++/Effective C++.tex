@@ -1,0 +1,178 @@
+\documentclass[a4paper, twocolumn]{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts} 
+\usepackage{color}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{graphics}
+\usepackage[pdftex]{hyperref}
+\usepackage{moreverb}
+
+\usepackage[novbox]{pdfsync}
+
+\title{Summary: Effective C++ \\
+	\large
+	55 Specific Ways to Improve Your Programs and Designs
+	Scott Meyers}
+\author{Stefan Götschi}
+
+% Commands
+
+\let\oldsubsection\subsection
+
+\newcounter{mysubsection}
+\renewcommand{\subsection}{
+    \stepcounter{mysubsection}
+    \oldsubsection
+}
+\renewcommand{\thesubsection}{\arabic{mysubsection}.}
+
+\definecolor{lightgrey}{rgb}{0.96,0.96,0.96}
+\newcommand{\code}[1]{\texttt{\color{black}{#1}}}
+\newcommand{\keyword}[1]{\textbf{\color{black}{#1}}}
+\newcommand{\example}[1]{\textbf{\medskip\colorbox{lightgrey}{\color{black}{Beispiel: #1}}}}
+
+\begin{document}
+\maketitle
+
+\section{Accustoming Yourself to C++}
+
+\subsection{View C++ as a federation of languages}
+
+\subsection{Prefer \code{const}s, \code{enum}, \code{inline}s to \code{\#define}s}
+
+\subsection{Use \code{const} whenever possible}
+
+\subsection{Make sure that objects are initializued before they're used}
+\newpage
+
+\section{Constructors, Destructors, and Assignment Operators}
+
+\subsection{Know what functions C++ silently writes and calls}
+
+\subsection{Explicitly disallow the use of compiler-generated function you do not want}
+
+\subsection{Declare destructors virtual in polymorphic base classes}
+
+\subsection{Prevent exceptions from leaving destructors}
+
+\subsection{Never call virtual functions during construction or destruction}
+
+\subsection{Have assignment operators return a reference to \code{*this}}
+
+\subsection{Handle assignment to self in \code{operator=}}
+
+\subsection{Copy all parts of an object}
+\newpage
+
+\section{Resource Management}
+
+\subsection{Use objects to manage resources}
+
+\subsection{Think carefully about copying behavior in resource-managing classes}
+
+\subsection{Provide access to raw resources in resource-managing classes}
+
+\subsection{Use the same form in corresponging uses of \code{new} and \code{delete}}
+
+\subsection{Store \code{new}ed objects in smart pointers in standalone statements}
+\newpage
+
+\section{Designs and Declarations}
+
+\subsection{Make interface easy to use correctly and hard to use incorrectly}
+
+\subsection{Treat \code{class} design as type design}
+
+\subsection{Prefer pass-by-reference-to-\code{const} to pass-by-value}
+
+\subsection{Don't try to return a reference when you must return an objects}
+
+\subsection{Declare data members \code{private}}
+
+\subsection{Prefer non-member non-friend functions to member functions}
+
+\subsection{Declare non-member functions when type converstions should apply to all parameters}
+
+\subsection{Consider support for a non-throwing \code{swap}}
+\newpage
+
+\section{Implementations}
+
+\subsection{Postpone variable definitions as long as possible}
+
+\subsection{Minimize casting}
+
+\subsection{Avoid returning "handles" to object internals}
+
+\subsection{Strive for exception-safe code}
+
+\subsection{Understand the ins and outs of inlining}
+
+\subsection{Minimize compilation dependencies between files}
+\newpage
+
+\section{Inheritance and Object-Oriented Design}
+
+\subsection{Make sure public inheritance models "is-a".}
+
+\subsection{Avoid hiding inherited names}
+
+\subsection{Differentiate between inheritance of interface and inheritance of implementation}
+
+\subsection{Consider alternatives to virtual functions}
+
+\subsection{Never redefine an inherited non-virtual function}
+
+\subsection{Never redefine a function's inherited default parameter value}
+
+\subsection{Model "has-a" or "is-implemented-in-terms-of" through composition}
+
+\subsection{Use private inheritance judiciously}
+
+\subsection{Use multiple inheritance judiciously}
+\newpage
+
+\section{Templates and Generic Programming}
+
+\subsection{Understand implicit interfaces and compile-time polymorphism}
+
+\subsection{Understand the two meanings of \code{typename}}
+
+\subsection{Know how to access names in templatized base classes}
+
+\subsection{Factor parameter-independent code out of templates}
+
+\subsection{Use member function templates to accept "all compatible types"}
+
+\subsection{Define non-member functions inside templates when type conversions are desired}
+
+\subsection{Use traits classes for information about types}
+
+\subsection{Be aware of template metaprogramming}
+\newpage
+
+\section{Customing \code{new} and \code{delete}}
+
+\subsection{Understand the behavior of the \code{new}-handler}
+
+\subsection{Understand when it makes sense to replace \code{new} and \code{delete}}
+
+\subsection{Adhere to convention when writing \code{new} and \code{delete}}
+
+\subsection{Write placement \code{delete} if you write placement \code{new}}
+\newpage
+
+\section{Miscellany}
+
+\subsection{Pay attention to compiler warnings}
+
+\subsection{Familiarize yourself with the standard library, including \code{TR1}}
+
+\subsection{Familiarize yourself with Boost}
+\newpage
+
+\section{Beyond Effective C++}
+
+
+\end{document}
