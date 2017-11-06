@@ -38,12 +38,24 @@
 \section{Accustoming Yourself to C++}
 
 \subsection{View C++ as a federation of languages}
+There are several aspects of C++: C, Object-Oriented C++, Template C++, STL, and even more. The approaches to write efficient C++ vary from aspect to aspect.
 
 \subsection{Prefer \code{const}s, \code{enum}, \code{inline}s to \code{\#define}s}
+Whenever possible avoid \code{\#include}. If it's a global constant just use a \code{const} variables in anonymous namespaces. (if you have pointers don't forget to write const twice.) The advantage of this is that using \code{static const} members of classes have limited accessibilty.\\
+There is a point about hacking around a limitation of old compilers not accepting initial values in declaration. When you need that you can use an enum which can have a defined value. But don't do this if you work with current compilers.\\
+Another point is that you can get rid of macros that replace function calls by using templates at no runtime cost.\\
+One point that is missing in the book is that you should use macros as seldomly as possible as IDEs sometimes have a hard time to follow them and an even harder one to refactor them.
 
 \subsection{Use \code{const} whenever possible}
+You can easily make pointers and objects immutable using \code{const}. This might allow you to find certain bugs at compile time already. But always be aware of what exactly is const (\code{const T*} vs. \code{T* const}).\\
+It is prudent to make return types from operators const as otherwise you could assign to the result of an operation.\\
+If you have to write a \code{const} and a non-\code{const} member function you typically do code duplication. If you want to avoid that in the non-\code{const} function call the \code{const} function and cast away the \code{const} on the return value. (Don't forget to cast \code{this} to a const object to get the other implementation.
 
-\subsection{Make sure that objects are initializued before they're used}
+\subsection{Make sure that objects are initialized before they're used}
+Either read up on when your data is guaranteed to be initialized or always initialize all your data.\\
+Don't misunderstand initializing with assignment. This easily happens in class constructors. The problem is not with built in data types butwith user-defined types which will first be default constructed and then assigned to.\\
+There is a tip to use private functions to initialize class members if too many constructors exist. But this is not accurate anymore - the current approach for this is to use delegating constructors.\\
+Another thing are static objects. To get around the problem of the right initialization order we can put them as static variables into functions where they will be initialied before they are used. Until recently this was not thread safe but most compilers guarantee thread safe initialization now.
 \newpage
 
 \section{Constructors, Destructors, and Assignment Operators}
