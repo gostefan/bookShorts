@@ -61,6 +61,31 @@ Another thing are static objects. To get around the problem of the right initial
 \section{Constructors, Destructors, and Assignment Operators}
 
 \subsection{Know what functions C++ silently writes and calls}
+If you don't write the functions on your own C++ will write some for you.
+\begin{verbatim}
+class Empty{};
+\end{verbatim}
+becomes
+\begin{verbatim}
+class Empty {
+  public:
+    Empty() {...} // default constructor
+    Empty(const Empty& rhs) {...}
+                    // copy constructor
+    Empty(Empty&& rhs) {...}
+                    // move constructor
+    ~Empty() {...} // destructor
+    Empty& operator=(const Empty& rhs)
+              {...} // copy assignment
+    Empty& operator=(Empty&& rhs)
+              {...} // move assignment
+}
+\end{verbatim}
+This is augmented from the book's version which covers C++ from pre C++11 / move semantics.
+
+The created constructors and assignment operators just copy/assign/move all the members from the other object.
+
+But the compiler will only create these functions for you if the created code is legal and it has any chance of making sense. This means that if you use a reference or \code{const} member these functions will not be created.
 
 \subsection{Explicitly disallow the use of compiler-generated function you do not want}
 
