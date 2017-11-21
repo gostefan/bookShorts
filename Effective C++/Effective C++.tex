@@ -124,6 +124,14 @@ What happens now if the connection cannot be closed - e.g. because the connectio
 For normal code flow this might be fine and while testing your program will be working. But let's imagine a situation where another exception comes in - e.g. a write to your database failed.
 This exception starts to unwind the stack and if you don't catch it before at some point it will call the destructor of your \code{DbConnection}. If this then throws an exception as well C++ either defines program termination or undefined behavior.\\
 
+There are two primary ways to resolve this issue:
+\paragraph{Terminate the program}
+If there is an exception thrown within the destructor of an object and you cannot continue normal execution then terminate the program the proper way (\code{std::abort();}).
+\paragraph{Swallow the exception}
+Sometimes it's better to (log and) swallow an exception than to have/run the risk of premature program termination.
+\paragraph{}
+An alternative approach would be to extract the functionality in the destructor to a funciton - e.g. \code{close} that may throw. That way the client can handle the exception. If on object destruction that function was not called already call it and use one of the above approaches to handle the exception.\\
+Be aware how this solution relates to the RAII idiom.0
 
 \subsection{Never call virtual functions during construction or destruction}
 
