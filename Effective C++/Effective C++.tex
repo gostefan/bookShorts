@@ -146,8 +146,29 @@ Conversely if that is not possible because the base class doesn't have all infor
 To enable assignment chains like \code{x = y = z = 14} we need to return a reference to \code{*this} from the assignment operator. This rule applies to all assignment operators, not just the standard ones. E.g. \code{+=}, \code{-=}, \code{*=}, \code{/=},...
 
 \subsection{Handle assignment to self in \code{operator=}}
+Always think about an assignment to self (\code{x = x}) when writing an assignment operator. It might happen easier than you think that an object is assigned to itself (e.g. via pointers).
+
+It is particularly important if the assinment operator releases resouces of the object previously held (like freeing memory). If the order is wrong you might free the memory and afterwards copy the already freed memory.\\
+This situation typically means that your assignment operator isn't exception safe either. That means if an exception leaves the assinment operator nothing has changed in the object.\\
+If you manage to make assinment operators exception save it typically means that they're also self-assignment save.
+
+An alternative is to use the "copy and swap" technique which also relates to exception safe code (Item \ref{ssec:ExceptionSafeCode}). The idea is to use the copy constructor to create a new instance and then use a swap function that typically just swaps all members of the objects.
+
+If you're an efficiency buff and think that assinment to self occurrs often enough just use the following:
+\begin{verbatim}
+	MyClass& operator=(const MyClass& rhs) {
+	  if (this == &rhs)
+	    return *this;
+	  ...
+	}
+\end{verbatim}
 
 \subsection{Copy all parts of an object}
+Be aware that if you define your own copy- (and move-) constructor you need to make sure that all members are copied. The compiler won't do that for you anymore. Whenever you add a member you need to add it to all the constructors.
+
+The same goes for derived classes. You need to actively call the copy constructor of the base class.
+
+If you want to combine copy assinment and copy construction do it in a third common funciton and not by calling each other.
 \newpage
 
 \section{Resource Management}
@@ -191,6 +212,7 @@ To enable assignment chains like \code{x = y = z = 14} we need to return a refer
 \subsection{Avoid returning "handles" to object internals}
 
 \subsection{Strive for exception-safe code}
+\label{ssec:ExceptionSafeCode}
 
 \subsection{Understand the ins and outs of inlining}
 
