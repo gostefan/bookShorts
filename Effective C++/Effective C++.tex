@@ -94,44 +94,45 @@ You could also have a base class that defines these functions private and inheri
 
 Not covered by the book is that modern C++ has a cleaner approach to this: you can delete unwanted functions:
 \begin{verbatim}
-	class Uncopyable {
+	class NoCopy {
 	  public:
-		Uncopyable() {...}
-		Uncopyable(const Uncopyable&) = delete;
-		Uncopyable& operator=(const Uncopyable&) = delete;
+	    NoCopy() {...}
+	    NoCopy(const NoCopy&) = delete;
+	    NoCopy& operator=(const NoCopy&)
+	                          = delete;
 	}
 \end{verbatim}
 With modern C++ you might think about declaring a move constructor and assinment operator. This doesn't copy your object but moves it around.
 
 \subsection{Declare destructors virtual in polymorphic base classes}
-If you have a base class that is used in a polymorphic context you always want to declare your destructor \code{virtual}.\\
-Say you have a file system interface that hides all the specialities of each operating system. There is a factory function that returns you a pointer to an object of the interface type with the contract that you delete that pointer after use.\\
-When you do that you call the destructor of the base class which is non-virtual. C++ specifies undefined behavior while typically you only destruct the base class part while the derived part is never destroyed.\\
-The easy solution to get around this is to define the destructor \code{virtual}. With this the call to the base class destructor will be routed to the derived class destructor as well.
+Assume you have a file system interface that hides all the specialities of each operating system. There is a factory function that returns you a pointer to an object of the interface type with the contract that you delete that pointer after use.\\
+If your destructor is non-virtual \code{delete} C++ specifies undefined behavior - typically that only destroys the base class part while the derived part is never destroyed.\\
+The easy solution to get around this is to define the destructor \code{virtual}. With this the call to the base class destructor will be dynamically dispatched and routed to the derived class destructor (which in turn calls the base's destructor).
 
-If a class does not define a virtual destructor it is often not meant to extended. Although the reasons for not declaring a \code{virtual} destructor might be different as well:\\
-Not declaring any virtual functions enables you to pass your objects to languages like C or FORTRAN as they don't know \code{virtual}. Having \code{virtual} functions in an object increases the size of that object by one pointer (typically).\\
-This means that people typically declare a \code{virtual} destructor if your class has at least one \code{virtual} function.
+If a class does not define a virtual destructor it is often not meant to extended. Although the reasons for not declaring a \code{virtual} destructor might be different as well:
+\begin{itemize}
+	\item Not declaring any virtual functions enables you to pass your objects to languages like C or FORTRAN as they don't know \code{virtual}.
+	\item Having \code{virtual} functions in an object increases the size of that object by one pointer (typically).
+\end{itemize}
+This means that in gener you declare a \code{virtual} destructor if your class has at least one \code{virtual} function.
 
-The above problem can also bite you if you inherit from standard library classes like \code{string}, \code{vector}, \code{map}, etc. These all don't have a \code{virtual} destructor.
+Be aware that standard library classes like \code{string}, \code{vector}, \code{map}, etc. all don't have a \code{virtual} destructor.
 
-Last but not least it might make sense to declare a pure \code{virtual} destructor - e.g. if you are declaring a base class that should not be instantiated even though it has no abstract functions.\\
-If you do so be aware that you need to supply a definition for the destructor anyway as the compiler will generate a call to the base class destructor from each derived classes destructor.
+Declare a pure \code{virtual} destructor if you are declaring an abstract class that has no abstract functions - that makes it abstract.\\
+But be aware that a definition of the destructor is necessary anyway. The compiler will generate a call to the base class's destructor from each derived class's destructor.
 
 \subsection{Prevent exceptions from leaving destructors}
 Say you have a database connection class \code{DbConnection}. The conneciton is established in the constructor and closed in the destructor.\\
-What happens now if the connection cannot be closed - e.g. because the connection is lost? You might be tempted to throw an exception which the surrounding code is supposed to catch and handle.\\
-For normal code flow this might be fine and while testing your program will be working. But let's imagine a situation where another exception comes in - e.g. a write to your database failed.
-This exception starts to unwind the stack and if you don't catch it before at some point it will call the destructor of your \code{DbConnection}. If this then throws an exception as well C++ either defines program termination or undefined behavior.\\
+What happens if the connection cannot be closed - e.g. because the connection is lost? You throw an exception which the calling code needs to handle?\\
+For normal code flow this seems fine and testing will make it seem ok. But if your connection's destructor is called because another exception unwinds the stack throwing another excpetion is trouble - C++ either defines program termination or undefined behavior.\\
 
 There are two primary ways to resolve this issue:
 \paragraph{Terminate the program}
-If there is an exception thrown within the destructor of an object and you cannot continue normal execution then terminate the program the proper way (\code{std::abort();}).
+If you are at a point where you want to throw an exception in the destructor and you cannot continue normal execution then (log the error and) terminate the program the proper way (\code{std::abort();}).
 \paragraph{Swallow the exception}
-Sometimes it's better to (log and) swallow an exception than to have/run the risk of premature program termination.
+Sometimes it's better though to (log and) swallow an exception than to have/run the risk of premature program termination.
 \paragraph{}
-An alternative approach would be to extract the functionality in the destructor to a funciton - e.g. \code{close} that may throw. That way the client can handle the exception. If on object destruction that function was not called already call it and use one of the above approaches to handle the exception.\\
-Be aware how this solution relates to the RAII idiom.0
+An alternative approach would be to extract the functionality in the destructor to a funciton - e.g. \code{close} that may throw. That way the client can handle the exception if he wants to. And if \code{clode} wasn't called on object destruction the destructor will call it and use one of the above approaches to handle the exception.
 
 \subsection{Never call virtual functions during construction or destruction}
 
