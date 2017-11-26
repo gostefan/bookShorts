@@ -135,8 +135,15 @@ Sometimes it's better though to (log and) swallow an exception than to have/run 
 An alternative approach would be to extract the functionality in the destructor to a funciton - e.g. \code{close} that may throw. That way the client can handle the exception if he wants to. And if \code{clode} wasn't called on object destruction the destructor will call it and use one of the above approaches to handle the exception.
 
 \subsection{Never call virtual functions during construction or destruction}
+In constructing a derived class first the base class constructor is called. But during the base class constructor all \code{virtual} functions behave as though it were a base class object. The virtual function therefore will not dispatch to the class we want to create but only to the class in whose constructor we are.
+
+It doesn't only behave this way - the type of the object during construction is always of the class whose constructor is currently running. And the same applies during destruction.
+
+An alternatives to \code{virtual} functions is to pass all arguments to the base constructor so he doesn't need to pass the control flow to the derived class.\\
+Conversely if that is not possible because the base class doesn't have all information the functionality belongs in the derived class constructor.
 
 \subsection{Have assignment operators return a reference to \code{*this}}
+To enable assignment chains like \code{x = y = z = 14} we need to return a reference to \code{*this} from the assignment operator. This rule applies to all assignment operators, not just the standard ones. E.g. \code{+=}, \code{-=}, \code{*=}, \code{/=},...
 
 \subsection{Handle assignment to self in \code{operator=}}
 
