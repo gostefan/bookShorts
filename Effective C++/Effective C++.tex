@@ -87,7 +87,7 @@ The created constructors and assignment operators just copy/assign/move all the 
 
 But the compiler will only create these functions for you if the created code is legal and it has any chance of making sense. This means that if you use a reference or \code{const} member these functions will not be created.
 
-\subsection{Explicitly disallow the use of compiler-generated function you do not want}
+\subsection{Explicitly disallow the use of compiler-generated function you do not want} \label{ssec:DeleteCompilerFunctions}
 Some objects should not be copyable and you'd like the error to arise at compile time already.\\
 The book proposes to make the copy constructor and copy assignment operator \code{private} and not implement them. This prohibits all other code to use them and if someone were to use them inside the class compilation would fail at link time.\\
 You could also have a base class that defines these functions private and inherit from it to make this more explicit.
@@ -121,7 +121,7 @@ Be aware that standard library classes like \code{string}, \code{vector}, \code{
 Declare a pure \code{virtual} destructor if you are declaring an abstract class that has no abstract functions - that makes it abstract.\\
 But be aware that a definition of the destructor is necessary anyway. The compiler will generate a call to the base class's destructor from each derived class's destructor.
 
-\subsection{Prevent exceptions from leaving destructors}
+\subsection{Prevent exceptions from leaving destructors} \label{ssec:ExceptionsInDtors}
 Say you have a database connection class \code{DbConnection}. The conneciton is established in the constructor and closed in the destructor.\\
 What happens if the connection cannot be closed - e.g. because the connection is lost? You throw an exception which the calling code needs to handle?\\
 For normal code flow this seems fine and testing will make it seem ok. But if your connection's destructor is called because another exception unwinds the stack throwing another excpetion is trouble - C++ either defines program termination or undefined behavior.\\
@@ -174,10 +174,33 @@ If you want to combine copy assinment and copy construction do it in a third com
 \section{Resource Management}
 
 \subsection{Use objects to manage resources}
+Put all resources you manage inside an object that makes sure the resource is released again. An example for this are smart pointers. The concept is named RAII (Resource Acquisition is Initialization).
+
+There are two critical aspects:
+\begin{itemize}
+	\item Turn acquired resources over to resource management objects immediately.
+	\item Resource management objects use the destructor to release the resource. (See item \ref{ssec:ExceptionsInDtors}.)
+\end{itemize}
+
+The book now talks about details of \code{std::auto\_ptr} which are outdated as of C++11 anyways: use \code{std::shared\_ptr} and \code{std::unique\_ptr}. It also goes on about these concepts not working for dynamic arrays with is outdated as well.
+
+Be aware that the \code{std::shared\_ptr} cannot break cycles of pointers and delete those resources. These will stay valid indefinitely.
 
 \subsection{Think carefully about copying behavior in resource-managing classes}
+Typically resources are non-copiable and therefore resource-managing classes are in a dilemma of what to do when being copied:
+\begin{itemize}
+	\item Prohibit copying by deleting the copying functions (see item \ref{ssec:DeleteCompilerFunctions}).
+	\item Release the resource when the reference-count to the managing resource is zero. (This is what \code{std::shared\_ptr} does.)
+	\item If the resource is copyable the managing class might be copied as well.
+	\item In rare cases you transfer the ownership of the resource. This is what the outdated \code{std::auto\_ptr} did.
+\end{itemize}
 
 \subsection{Provide access to raw resources in resource-managing classes}
+As some API function might rely on the raw resource rather than the resource managing classes you need access to the raw resource.
+
+If the resource has member functions of its own it might be reasonable to define \code{operator->}.
+
+Finally if you want implicit conversion of the managing type to the resource type you want to define \code{operator Container() const}. But this might also lead to unwanted conversions.
 
 \subsection{Use the same form in corresponging uses of \code{new} and \code{delete}}
 
