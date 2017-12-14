@@ -196,15 +196,25 @@ Typically resources are non-copiable and therefore resource-managing classes are
 \end{itemize}
 
 \subsection{Provide access to raw resources in resource-managing classes}
-As some API function might rely on the raw resource rather than the resource managing classes you need access to the raw resource.
+As some API function might rely on the raw resource rather than the resource managing classes you need access to the raw resource (e.g. define a \code{get()} function).
 
 If the resource has member functions of its own it might be reasonable to define \code{operator->}.
 
-Finally if you want implicit conversion of the managing type to the resource type you want to define \code{operator Container() const}. But this might also lead to unwanted conversions.
+Finally if you want implicit conversion of the managing type to the resource type you want to define \code{operator Container() const}. But this might also lead to unwanted conversions and with that duplication of the resource.
 
 \subsection{Use the same form in corresponging uses of \code{new} and \code{delete}}
+If you use \code{new} to allocate an array you need to use \code{delete []}. The reason is that \code{new} default constructs these objects and \code{delete []} destructs all objects. If you only use \code{delete} you will typically only deconstruct the first element.
 
 \subsection{Store \code{new}ed objects in smart pointers in standalone statements}
+Always store \code{new}ed objects and arrays in smart pointers - either \code{unique\_ptr} or \code{shared\_ptr}.
+
+Also make sure allocation and passing into the smart pointer is the only thing you do on that line. Otherwise you might have a leak in between. Look at:
+
+\code{processElement(std::shared\_ptr<Element>(\\new Element()), getPosition());}
+
+If \code{new Element()} is executed first and \code{getPosition()} second it's possible that it throws an exception before the \code{new}ed \code{Element} is passed to the smart pointer.
+
+Better even: Use \code{std::make\_unique} resp. \code{std::make\_shared}.
 \newpage
 
 \section{Designs and Declarations}
