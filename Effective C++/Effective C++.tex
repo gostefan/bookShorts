@@ -51,7 +51,7 @@ You can easily make pointers and objects immutable using \code{const}. This migh
 It is prudent to make return types from operators const as otherwise you could assign to the result of an operation.\\
 If you have to write a \code{const} and a non-\code{const} member function you typically do code duplication. If you want to avoid that in the non-\code{const} function call the \code{const} function and cast away the \code{const} on the return value. (Don't forget to cast \code{this} to a const object to get the other implementation.
 
-\subsection{Make sure that objects are initialized before they're used}
+\subsection{Make sure that objects are initialized before they're used} \label{ssec:objInitialization}
 Either read up on when your data is guaranteed to be initialized or always initialize all your data.\\
 Don't misunderstand initializing with assignment. This easily happens in class constructors. The problem is not with built in data types butwith user-defined types which will first be default constructed and then assigned to.\\
 There is a tip to use private functions to initialize class members if too many constructors exist. But this is not accurate anymore - the current approach for this is to use delegating constructors.\\
@@ -220,6 +220,18 @@ Better even: Use \code{std::make\_unique} resp. \code{std::make\_shared}.
 \section{Designs and Declarations}
 
 \subsection{Make interface easy to use correctly and hard to use incorrectly}
+Making a date API is hard. How do you create a date object. Is it \code{Date(day, month, year)} or rather \code{Date(month, day, year)}?
+
+A solution is to have structs for each \code{Day}, \code{Month} and \code{Year} and build the Date from those. This would then look like this:
+
+\code{Date d(Day(30), Month(10), Year(1982));}
+
+If the order is wrong your compile will complain and you will know instead of having a bug.\\
+You can go further and restrict the number of months by defining the constructor private and public static functions to create each one. See item \ref{ssec:objInitialization} if you want to create static objects instead of functions.
+
+Try to make your API behave consisten to built-in types and classes in the STL. Making things \code{const} also limits what (wrong) clients of an API can do with objects.
+
+It is typically a good idea to return smart pointers if you need some destruction work done reliably. You can also have your own destructor on those instead of using the default \code{delete}.
 
 \subsection{Treat \code{class} design as type design}
 
