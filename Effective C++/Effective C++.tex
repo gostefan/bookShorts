@@ -273,8 +273,18 @@ Never return a reference to const that was created inside the function. The valu
 Be aware that there is return value optimization (RVO) in C++. This means that when possible the return value will be not be copied back to where you called the function but it will be constructed there.
 
 \subsection{Declare data members \code{private}}
+Typically you want to hide your implementation behind interfaces (of functions) so you can easily replace implementations without changing client code - this is called Encapsulation.
+
+As \code{protected} members can be used in any sub-classes and they are no better than \code{public} members. This means that you want to use \code{private} for all class members.
 
 \subsection{Prefer non-member non-friend functions to member functions} \label{ssec:freeFunctions}
+It's a wrong assumption that your functions and your data need to go as close together as possible. The data should be as encapsulated as possible. This means that we want as few functions to change as possible when the implementation changes.
+
+So that means that all functions that don't need access to the private members of a class should be free functions which means non-member non-friend functions. It has proven to be reasonable to put them in the same namespace as their classes. A client can even contribute his own functions to that namespace.
+
+These functions are all utility functions. This means that the client could achieve all the functionality without that function but it would be more complex.
+
+Another advantage of free functions is that you can split up large collections of them across multiple header files so you only have to be compile dependent on the ones you need.
 
 \subsection{Declare non-member functions when type converstions should apply to all parameters} \label{ssec:freeFunctions2}
 
