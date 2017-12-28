@@ -287,8 +287,19 @@ These functions are all utility functions. This means that the client could achi
 Another advantage of free functions is that you can split up large collections of them across multiple header files so you only have to be compile dependent on the ones you need.
 
 \subsection{Declare non-member functions when type converstions should apply to all parameters} \label{ssec:freeFunctions2}
+If you declared member functions you only get type conversion on the arguments but not on the object you call them on. This seems obvious in most circumstances - but with \code{operator}s it's a different story.
+
+A multiplication that is implemented as a member function will only work if the object on the left of the operator doesn't need conversion. To solve this problem it's best to implement non-member \code{operator}s because they can have type conversion on both arguments.
 
 \subsection{Consider support for a non-throwing \code{swap}}
+The default \code{std::swap} is inefficient as it has one copy construction,  one destruction and two copy assignments. We therefore often want to supply an efficient \code{swap} operation. Make sure you follow these rules:
+\begin{itemize}
+	\item Make sure \code{swap} doesn't throw. It makes implementing the strong exception guarantee really easy. (See item \ref{ssec:ExceptionSafeCode}).
+	\item Write a public member \code{swap} that swaps it with another object.
+	\item Also write a non-member \code{swap} in the same namespace as the object.
+	\item If you write a class (not a template) specialize \code{std::swap} for your object.
+\end{itemize}
+Calls to \code{swap} should never be qualified (e.g. with \code{std::}) and have \code{using std::swap;} before the call. The compiler will then figure out the correct \code{swap} function to call using ADL and function selection mechanics.
 \newpage
 
 \section{Implementations}
