@@ -94,6 +94,30 @@ It is important to chose names wisely as they reveal what the content actually r
 If you think you have a better name for something then change the name. Most other people will be thankful.
 
 \subsection{Functions}
+When you write functions bear in mind that they should follow these rules:
+\begin{description}
+	\item[Small!] Functions should be really small! They should be two three or four lines long if at all possible.\\
+		This implies that calls inside \code{if}s and loops should typically be their own function.
+	\item[Do one Thing] Don't do multiple things - this makes function naming harder as well.
+	\item[One Level of Abstraction] One function splits the one thing stated as function name apart - the parts of the next level of abstraction. Never mix levels of abstraction in one function.
+	\item[Stepdown Rule] The first (topmost) function in a class should be the broadest function. The first function inside it should be the one following it and so on. This guarantees a natural flow of reading - from the high level concepts to the details.
+	\item[switch -> Polymorphism] Often switch statements can be avoided by using different classes instead of different values. But if not then the switch statement should introduce different classes with different behavior. Most importantly: Never repeat switch statements.
+	\item[Descriptive Names] THe more descriptive a name is the less someone has to read the code to understand what it does. A clear long name is better than a cryptic short name.
+	\item[Few Arguments] Functions should take few arguments - best none. Anything beyond three arguments needs really good justification. The problem is that you need a closer look to understand all the arguments as they are not obvious anymore. Also testing a function gets exponentially more complicated.
+	\item[Output Arguments] Try to avoid them - use return values instead.
+	\item[Flags] Flags advertize that a function does more than one thing. Create individual functions for these options.
+	\item[Argument Objects] If you use more than two or three arguments you might consider wrapping them in their own class.
+	\item[Argument Lists] Lists count as one argument.
+	\item[Verbs and Keywords] Monads take verbal names (with nouns as arguments). Nouns in the function name may clear up argument ordering.
+	\item[Side Effects] Functions should only do what they are expected to do. Unexpected side effects are hard to debug.
+	\item[Output Arguments] Avoid output arguments whenever possible - arguments are always seen as input.
+	\item[Comman Query Separation] Something that changes an object shouldn't return anything. It typically confuses the reader of the code.
+	\item[Exceptions vs. Error Codes] Exceptions make for cleaner code than error codes which we need to check for every function individually. Therefore prefer exceptions. Also a class defining the error codes is a dependency magnet and if it changes lots of the code needs recompilation/-deploying.
+	\item[Error handling is one thing] So use one single function just to handle the errors.
+	\item[DRY] Don't repeat yourself. Repetition is a big source of evil. You fix a bug in one place but not in the other. Such problems can occur so easily.
+	\item[Structured Programming] Dijkstra said there should only be one entry and one exit to a function - i.e. one \code{return} statement, no \code{break} and \code{continue} statements and no \code{goto}s. Often this is good advice - but as often it's cleaner to sprinkle them in the functions. Just as long as it helps the readability of a function.
+\end{description}
+How to end up with functions like this? Write messy code but also write unit tests for it. Then massage the messy code until it follows the guidelines and still fulfill the unit tests.
 
 \subsection{Comments}
 
