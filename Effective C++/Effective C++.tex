@@ -60,7 +60,7 @@ Another thing are static objects. To get around the problem of the right initial
 
 \section{Constructors, Destructors, and Assignment Operators}
 
-\subsection{Know what functions C++ silently writes and calls}
+\subsection{Know what functions C++ silently writes and calls} \label{ssec:silentFunctions}
 If you don't write the functions on your own C++ will write some for you.
 \begin{verbatim}
 class Empty{};
@@ -104,7 +104,7 @@ Not covered by the book is that modern C++ has a cleaner approach to this: you c
 \end{verbatim}
 With modern C++ you might think about declaring a move constructor and assinment operator. This doesn't copy your object but moves it around.
 
-\subsection{Declare destructors virtual in polymorphic base classes}
+\subsection{Declare destructors virtual in polymorphic base classes} \label{ssec:virtDtor}
 Assume you have a file system interface that hides all the specialities of each operating system. There is a factory function that returns you a pointer to an object of the interface type with the contract that you delete that pointer after use.\\
 If your destructor is non-virtual \code{delete} C++ specifies undefined behavior - typically that only destroys the base class part while the derived part is never destroyed.\\
 The easy solution to get around this is to define the destructor \code{virtual}. With this the call to the base class destructor will be dynamically dispatched and routed to the derived class destructor (which in turn calls the base's destructor).
@@ -195,7 +195,7 @@ Typically resources are non-copiable and therefore resource-managing classes are
 	\item In rare cases you transfer the ownership of the resource. This is what the outdated \code{std::auto\_ptr} did.
 \end{itemize}
 
-\subsection{Provide access to raw resources in resource-managing classes}
+\subsection{Provide access to raw resources in resource-managing classes} \label{ssec:rawResources}
 As some API function might rely on the raw resource rather than the resource managing classes you need access to the raw resource (e.g. define a \code{get()} function).
 
 If the resource has member functions of its own it might be reasonable to define \code{operator->}.
@@ -234,18 +234,72 @@ Try to make your API behave consisten to built-in types and classes in the STL. 
 It is typically a good idea to return smart pointers if you need some destruction work done reliably. You can also have your own destructor on those instead of using the default \code{delete}.
 
 \subsection{Treat \code{class} design as type design}
+If you design your class rather than let it happen you end up with better code. Questions you should ask yourself while writing include:
+\begin{itemize}
+	\item What does the lifetime of your object look like?\\
+		Is it created by static functions \code{from...(...)} (possibly returning smart pointers?), constructor(s)? Does the client need to call \code{close}? Also see chapter \ref{sec:newDelete}
+	\item What's the difference between construction and assignment? See item \ref{ssec:silentFunctions}.
+	\item What does it mean for objects of your new type to be passed by value?\\
+		What all is copied in the copy constructor?
+	\item What are the restrictions on legal values for your new type?\\
+		What are the invariants? What happens when they are (about to be) violeted? Do you want to enumerate the states as static functions?
+	\item Does your new type fit into an inheritance graph?
+		What are designs and restrictions (e.g. non-virtual functions) of classes you want to inherit from? What functions are virtual in your class so it can be extended? See item \ref{ssec:virtDtor}
+	\item What kind of type conversions are allowed for your new type?\\
+		Are there types that you want to convert to implicitly or explicitly? See item \ref{ssec:rawResources}
+	\item What operators and functions make sense for the new type?\\
+		What functions should you provide? Which are members - which are free? See items \ref{ssec:freeFunctions}, \ref{ssec:freeFunctions2}, \ref{ssec:freeTemplateFunctions}.
+	\item What standard functions should be disallowed? See item \ref{ssec:DeleteCompilerFunctions}.
+	\item Who should have access to the members of your new type?\\
+		Which are \code{public}, \code{protected} and \code{private}? Which should have getters - which setters? Prefer getters and setters to direct access for encapsulation reasons.
+	\item What is the "undeclared interface" of your new type?\\
+		What performance and invariants do you guarantee? Are you thread safe?
+	\item How general is your new type?\\
+		Should you define a supertype with subtypes? Should it be a template?
+	\item Is a new type really what you need?\\
+		... or would some functions do the job just as well?
+\end{itemize}
 
 \subsection{Prefer pass-by-reference-to-\code{const} to pass-by-value}
+Copy by value can incurr a lot of overhead on copy constructions. Furthermore there is danger of slicing your object if a super type is passed by value - your value is cut and only the super type's parts survive.
+
+At least back then it was reasonable to also pass small user defined types by reference as some compilers didn't want to put them in registers whatever you do.
+
+But the bottom line is: Unless you have a good reason pass everything by reference except for built-in types and STL iterators.
 
 \subsection{Don't try to return a reference when you must return an objects}
+Never return a reference to const that was created inside the function. The value will seize to exist once the function returns. Also resist the temptation to return references to statics in your operators. If you try to do \code{a * b == c * d} and your \code{operator*} returns a reference to static this will always be true as the reference is twice the same.
+
+Be aware that there is return value optimization (RVO) in C++. This means that when possible the return value will be not be copied back to where you called the function but it will be constructed there.
 
 \subsection{Declare data members \code{private}}
+Typically you want to hide your implementation behind interfaces (of functions) so you can easily replace implementations without changing client code - this is called Encapsulation.
 
-\subsection{Prefer non-member non-friend functions to member functions}
+As \code{protected} members can be used in any sub-classes and they are no better than \code{public} members. This means that you want to use \code{private} for all class members.
 
-\subsection{Declare non-member functions when type converstions should apply to all parameters}
+\subsection{Prefer non-member non-friend functions to member functions} \label{ssec:freeFunctions}
+It's a wrong assumption that your functions and your data need to go as close together as possible. The data should be as encapsulated as possible. This means that we want as few functions to change as possible when the implementation changes.
+
+So that means that all functions that don't need access to the private members of a class should be free functions which means non-member non-friend functions. It has proven to be reasonable to put them in the same namespace as their classes. A client can even contribute his own functions to that namespace.
+
+These functions are all utility functions. This means that the client could achieve all the functionality without that function but it would be more complex.
+
+Another advantage of free functions is that you can split up large collections of them across multiple header files so you only have to be compile dependent on the ones you need.
+
+\subsection{Declare non-member functions when type converstions should apply to all parameters} \label{ssec:freeFunctions2}
+If you declared member functions you only get type conversion on the arguments but not on the object you call them on. This seems obvious in most circumstances - but with \code{operator}s it's a different story.
+
+A multiplication that is implemented as a member function will only work if the object on the left of the operator doesn't need conversion. To solve this problem it's best to implement non-member \code{operator}s because they can have type conversion on both arguments.
 
 \subsection{Consider support for a non-throwing \code{swap}}
+The default \code{std::swap} is inefficient as it has one copy construction,  one destruction and two copy assignments. We therefore often want to supply an efficient \code{swap} operation. Make sure you follow these rules:
+\begin{itemize}
+	\item Make sure \code{swap} doesn't throw. It makes implementing the strong exception guarantee really easy. (See item \ref{ssec:ExceptionSafeCode}).
+	\item Write a public member \code{swap} that swaps it with another object.
+	\item Also write a non-member \code{swap} in the same namespace as the object.
+	\item If you write a class (not a template) specialize \code{std::swap} for your object.
+\end{itemize}
+Calls to \code{swap} should never be qualified (e.g. with \code{std::}) and have \code{using std::swap;} before the call. The compiler will then figure out the correct \code{swap} function to call using ADL and function selection mechanics.
 \newpage
 
 \section{Implementations}
@@ -297,14 +351,14 @@ It is typically a good idea to return smart pointers if you need some destructio
 
 \subsection{Use member function templates to accept "all compatible types"}
 
-\subsection{Define non-member functions inside templates when type conversions are desired}
+\subsection{Define non-member functions inside templates when type conversions are desired} \label{ssec:freeTemplateFunctions}
 
 \subsection{Use traits classes for information about types}
 
 \subsection{Be aware of template metaprogramming}
 \newpage
 
-\section{Customing \code{new} and \code{delete}}
+\section{Customing \code{new} and \code{delete}} \label{sec:newDelete}
 
 \subsection{Understand the behavior of the \code{new}-handler}
 
