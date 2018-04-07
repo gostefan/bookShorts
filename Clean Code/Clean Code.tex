@@ -120,6 +120,42 @@ When you write functions bear in mind that they should follow these rules:
 How to end up with functions like this? Write messy code but also write unit tests for it. Then massage the messy code until it follows the guidelines and still fulfill the unit tests.
 
 \subsection{Comments}
+Comments are used to compensate for our failure to express ourselves in code. This is emphasized in these two points:
+\begin{description}
+	\item[Comments don't make up for bad code] If you find yourself unable to read some code clean it up and make it legible instead of commenting what it does.
+	\item[Explain yourself in code] If it is not obvious what some lines of code do maybe you should make a function that you can name. This is better than writing a comment.
+\end{description}
+\paragraph{Good Comments:}
+\begin{description}
+	\item[Legal Comments] Copyrights and similar should be stated at the start of the files.
+	\item[Informative Comments] Used to inform about things that can't be conveyed in code - e.g. what a Regex matches.
+	\item[Explanation of Intent] If it is not obvious why one would do what is done - e.g. why is a specific value returned.
+	\item[Clarifiction] Clear up obscure code flow - e.g. \code{a.compare(b) == -1; // a < b}.
+	\item[Warning of Consequence] If it's not obvous what consequences actions could have - e.g. thread safety.
+	\item[TODO] Sometimes it's reasonable to leave todos in the code. But there should be a resolve date in sight. Otherwise the code just stays incomplete and you will forget that it is.
+	\item[Amplification] There is a really important part of code that might be overlooked if not marked properly.
+	\item[Javadocs in public APIs] Write good Javadoc for APIs. These are important for someone else to understand how to use your code.
+\end{description}
+\paragraph{Bad Comments:}
+\begin{description}
+	\item[Mumbling] Don't just leave something behind. Either think about your comment or leave it be.
+	\item[Redundant Comments] If code is clear and obvious you don't need to write a comment about it - it's redundant. This happens often with Javadocs.
+	\item[Misleading Comments] Don't misinform readers. Be precise about your comments. E.g. when and if are two different things.
+	\item[Mandated Comments] If your team writes Javadoc for every function you will see tons of comments that are heavily redundant. People will forget to update them which leads to misinformation.
+	\item[Journal Comments] Don't write down changes at the top of a file like a change log. You have source code versioning for that.
+	\item[Noise Comments] We have a habbit of ignoring irrelevant comments. May it be comments for members or just plain useless comments (e.g. \code{// Give me a break!}).
+	\item[Scary Noise] Javadoc can also be scary if you have copy-paste errors in them (renamed the member but not the comment).
+	\item[Position Markers] You'll learn to ignore them soon if they are used too often. So only use them if there is a really good reason.
+	\item[Closing Brace] Your IDE will (hopefully) tell you where the brace started and therefore you don't need the comment.
+	\item[Attributions and Bylines] Don't annotate who added code. That's what your source control is for.
+	\item[Commented-Out Code] That code will go stale really fast and nobody will have the courage to delete it. So don't let it lie around.
+	\item[HTML Commments] The IDE should design how it displays information gathered from a comment - not the programmer - HTML is wrong here.
+	\item[Nonlocal information] Comments should describe code in their neighborhood. If the code is far away nobody will realize the comment is out of date and it will become wrong (e.g. default settings in getters).
+	\item[Too Much Information] Nobody reads huge comments. Keep it crisp and clear.
+	\item[Inobvious Connection] Don't expect the reader to understand all the details of the subsystem. Comments should be understandable without.
+	\item[Javadocs in Nonpublic Code] It's overhead to maintain and will become stale easily - and most often will not hold much information.
+\end{description}
+If you can rephrase your code in a way that contains your comment that's always better. This may include removing call chains and naming intermediates or extracting a whole method so you can name what you're doing.
 
 \subsection{Formatting}
 
