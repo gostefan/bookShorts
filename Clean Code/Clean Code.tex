@@ -158,6 +158,24 @@ Comments are used to compensate for our failure to express ourselves in code. Th
 If you can rephrase your code in a way that contains your comment that's always better. This may include removing call chains and naming intermediates or extracting a whole method so you can name what you're doing.
 
 \subsection{Formatting}
+We format our code to make it clear and easy to read.
+\begin{description}
+	\item[Vertical Size] Huge files are hard to keep in your mind completely. Therefore aim for shorter files - typically around 200 lines with an upper limit of 500.
+	\item[Newspaper Metaphor] First you should write a headline - a name that says what the file does. Following should be a "paragraph" that gives you the high-level story - the first couple of lines of code. Detail should come the further you read down the file.
+	\item[Vertical Openness] Blank lines should separate different concepts or parts of a file.
+	\item[Vertical Density] Lines of code next to each other should imply close association.
+	\item[Vertical Distance] Concepts closely related should stay close vertically. E.g. functions calling each other should stay close.
+	\item[Local Variables] should tend to be declared at the top of the function.
+	\item[Member Variables] should be declared at the top of the class. If not there do it at the bottom - but at least not separated and not in the middle somewhere.
+	\item[Dependent Functions] A function called by another should be close to the other and below the caller. (Non-Book: In C++ you may either declare functions above and define them below a caller or reverse the rule that callees should be just above callers. But decide for one concept and stick with it.)
+	\item[Conceptual Affinity] Some functions are similar by concept. Have them close by each other vertically.
+	\item[Horizontal Formating] Prefer shorter lines - but long lines are not evil. 80 - 120 characters can be fine but beyond it's probably wrong.
+	\item[Horizontal Openness and Density] Adding and not adding white spaces accentuate what is important in a line and what not. E.g. precedence of operators, what operator is used.
+	\item[Horizontal Alignment] Aligning assignments is not useful as it emphasizes the wrong thing (name rather than type) and separates name from value. Prefer grouping the entries vertically than aligning them horizontally.
+	\item[Indentation] We rely heavily on properly indented code. It might be confusing if it's not. Also resist the temptation to break indentation for small if statements or constructors.
+	\item[Dummy Scopes] Don't just add a semicolon on the end of a while loop. This is not clear. Best add proper braces and an empty block. If you prefer the semicolon put it on its own line and indent it properly.
+	\item[Team Rules] Define what your team likes as a coding style. Put this into your IDE and stick with it.
+\end{description}
 
 \subsection{Objects and Data Structures}
 
