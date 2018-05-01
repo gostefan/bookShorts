@@ -178,6 +178,36 @@ We format our code to make it clear and easy to read.
 \end{description}
 
 \subsection{Objects and Data Structures}
+\paragraph{Data Abstraction}
+There are typically two ways to handle data. Either we create a class with public members that has no (non-static) functions defined. Or alternatively we define getter and setter functions that completely hide the implementation (possibly even through an interface).
+
+\paragraph{Data/Object Anti-Symmetry} Comparing data structures and objects reveals their strenghts and weaknesses:
+
+\textit{Procedural code (using data structures) makes it easy to add new functions without changing the existing data structures. OO code makes it easy to add new classes without changing existing functions.}
+
+\textit{Procedural code makes it hard to add new data structures because all functions must change. OO code makes it hard to add new function because all the classes must change.}
+
+If you have a hybrid between a data structure and an object you get both down sides and no upside. So try to avoid them.
+
+\paragraph{Law of Demeter}
+\textit{A module should not know the innards of the objects it manipulates.} Or in a precise definition:\\
+A method $f$ of class $C$ should only call methods of:
+\begin{itemize}
+	\item class $C$
+	\item objects created by $f$
+	\item objects passed to $f$ as argument
+	\item objects held in members of $C$
+\end{itemize}
+
+\paragraph{Train Wrecks} are chained function calls. I.e. calls on objects that are the result of the previous call. Unless the objects are pure data structures this is in violation of the Law of Demeter.
+
+Typically train wrecks occurr when we want to get information (e.g. options/paths/etc.). Instead we could tell the object to do something (e.g. open a temporary stream) which stops the train wreck because it hides the innards of the class.
+
+\paragraph{Two special cases of data structures}
+\begin{description}
+	\item[Data Transfer Objects] only hold data while not containing any business logic at all.
+	\item[Active Records] are typically abstractions of table rows. They are DTOs with \code{load} and \code{save} functionality. But they should not contain business logic as well.
+\end{description}
 
 \subsection{Error Handling}
 
