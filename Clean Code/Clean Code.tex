@@ -210,6 +210,16 @@ Typically train wrecks occurr when we want to get information (e.g. options/path
 \end{description}
 
 \subsection{Error Handling}
+\begin{description}
+	\item[Use Exceptions - not error codes] Checking every call for an error code makes for really ugly (and illegible) code. If you have to use an API with error codes just wrap each function and throw an exception if an error code is returned.
+	\item[Try-Catch-Finally is first] If you handle exceptions at the top of your function (and re-throw if need be) the rest of the code can assume valid circumstances.
+	\item[Use Unchecked Exceptions] Checked expressions violate the Open/Closed Principle because you need to add the exception to all function definitions between the throw and the catch.
+	\item[Provide Context] A stack trace is great but if your error message tells the intent and problem that occurred it's easier to figure out what happened.
+	\item[Look from the caller] When designing exception classes (and messages) look from the callers side and not from the implementation side. A client is not interested in the implementation of the code. Think whether a client does different things for different exceptions.
+	\item[Define the normal flow] The normal flow should not be handled by exceptions. If there are different valid cases consider using the Special Case Pattern.
+	\item[Don't return \code{null}] If you use \code{null} as a valid response you're begging for both \code{NullPointerException}s and ugly \code{if}/\code{else} nesting. Typically code{null} is either an exception case or you want to return a special case object.
+	\item[Don't pass \code{null}] Checking for \code{null} and throwing \code{InvalidArgumentExceptions} clutters your code. Never pass \code{null} and use assertions to check that you aren't.
+\end{description}
 
 \subsection{Boundaries}
 
