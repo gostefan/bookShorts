@@ -222,6 +222,14 @@ Typically train wrecks occurr when we want to get information (e.g. options/path
 \end{description}
 
 \subsection{Boundaries}
+This chapter talks a lot about APIs - both internal and external.
+\paragraph{Using 3rd-party code} always exposes you to changes that might might happen in the next version. Even using Java classes doesn't help you. When generics were introduced e.g. \code{Map} changed quite a bit.
+Therefore it's often a good idea to wrap such classes in an interface class (and possibly interface) so you can adapt to changes without your users realizing. If you wrap your 3rd-party APIs you can also adapt to changes in the API without your whole system changing.
+\paragraph{Exploring and Learning Boundaries} can best be done by writing tests for the boundary/API to check that we understand and use it correctly. These are called learning tests and have their own validity as they can help you remember how an API works.\\
+There is a whole paragraph with an example of learning log4j.
+\paragraph{Learning tests are better than free} because they test the basic functionality of an API. If there is a new version of that package we can check whether the functionality or behavior changed very easily by running these test.
+\paragraph{Using code that does not yet exist} can be done if you write an internal interface to the future external API. You then create one implementation right now that mocks the API and once you get the external API you just have to bind your interface to that API and you're good to go.
+\paragraph{Clean Boundaries} means that you cut dependencies as early as possible. Otherwise changes in implementations might drag you through your whole code base.
 
 \subsection{Unit Tests}
 
