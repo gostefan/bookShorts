@@ -303,12 +303,43 @@ Calls to \code{swap} should never be qualified (e.g. with \code{std::}) and have
 \newpage
 
 \section{Implementations}
-
 \subsection{Postpone variable definitions as long as possible}
+Postpone variable definition as long as possible. This improves clarity and efficiency.
+
+If you only use a variable inside a loop also define it inside the loop unless you know that an assignment operation costs you less than a construction and destruction.
 
 \subsection{Minimize casting}
+Often casting is a sign of a wrong design decision. If you must try to use modern C++ style casts (\code{const\_cast}, \code{dynamic\_cast}, \code{reinterpret\_cast}, \code{static\_cast}) instead of C style casts (\code{(Type)object} resp. \code{Type(object)}).
+
+Addition to the book: There are equivalent \code{std::<type>\_pointer\_cast} that cast shared (smart) pointers starting C++11.
+
+Be aware that the pointer value to the base class version of an object doesn't have to be the same as the pointer to the same derived object. This happens more often with multiple inheritance.
+
+To call base class function implementations use \code{Base::function()} instead of casting the \code{this} pointer to base.
+
+Many situations of casting can be avoided either declaring a virtual function in the base class that can be overridden in the derived class or by using derived class containers instead of base class containers.
 
 \subsection{Avoid returning "handles" to object internals}
+It's easy to return "handles" to values or objects that are internal to a class. Look at the following example:
+\begin{verbatim}
+	class Sphere {
+	  public:
+	    Vector3& getCenter() const 
+	        { return center; }
+	  ...
+	  private:
+	    Vector3 center;
+	}
+	class Vector3 {
+	  public:
+	    set(double x, double y, double z)
+	        { ... }
+	}
+\end{verbatim}
+
+A client of this class can call \code{sphere.getCenter().set(a, b, c)} and update the position of the sphere. But most probably this was not intended.
+
+To avoid this we need to return a \code{const Vector3} from function \code{getCenter}.
 
 \subsection{Strive for exception-safe code}
 \label{ssec:ExceptionSafeCode}
