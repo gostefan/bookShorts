@@ -343,6 +343,22 @@ To avoid this we need to return a \code{const Vector3} from function \code{getCe
 
 \subsection{Strive for exception-safe code}
 \label{ssec:ExceptionSafeCode}
+When an exception occurs exception safe functions don't
+\begin{itemize}
+	\item Leak resources
+	\item allow data structures to become corrupted
+\end{itemize}
+There are three levels of exception-safety guarantees your code can give:
+\begin{description}
+	\item[The basic guarantee] means that everything remains in a valid state if an exception is thrown.
+	\item[The strong guarantee] promises that the program state is not changed if an exception is thrown.
+ 	\item[The nothrow guarantee] says that a function will never throw an exception and therefore always do what it's supposed to.
+\end{description}
+An easy way to achieve the strong guarantee is to implement the copy-and-swap approach. You frist create a copy of the state, modify it and at the very last line swap the old with the new data in a nothrow swap function.
+
+Acknowledge that it's not easy to achieve the strong guarantee by joining two functions with the strong guarantee. If the function called later throws the first function already changed the state and therefore we only have the basic guarantee.
+
+In general try to give the strong guarantee but at you need to at least have the basic guarantee. It might not be possible in some seldom cases though (by bad API design of other parties, etc.). And if you can't give the basic guarantee you should point this out to users of your code.
 
 \subsection{Understand the ins and outs of inlining}
 
