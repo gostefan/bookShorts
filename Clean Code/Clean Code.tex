@@ -232,6 +232,29 @@ There is a whole paragraph with an example of learning log4j.
 \paragraph{Clean Boundaries} means that you cut dependencies as early as possible. Otherwise changes in implementations might drag you through your whole code base.
 
 \subsection{Unit Tests}
+\paragraph{The three laws of TDD}
+\begin{description}
+	\item[First Law] You may not write production code until you have written a failing unit test.
+	\item[Second Law] You may not write more of a unit test than is sufficient to fail, and not compiling is failing.
+	\item[Third Law] You may not write more prodution code than is sufficient to pass the currently failing test.
+\end{description}
+Test code should have the same standards of quality as the production code. If not it gets harder and harder to maintain the production code that is tested by the poorly written test code. The only thing in which they may differ is efficiency.
+
+Tests enable you to change code and be confident that you didn't break anything.
+
+Write tests in a way that any reader understands what actually is tested and remove as much of the clutter as possible. Also it's a good idea to adhere to a build - operate - test structure in your tests.
+
+Try to only use one assert per test. This is too restrictive in some cases. But stick to testing one concept in one test (e.g. only test multiplication in one test).
+
+\paragraph{F.I.R.S.T}
+Tests follow these rules:
+\begin{description}
+	\item[Fast] When the tests take too long to run people won't run them and code will rot.
+	\item[Independent] Tests should not rely on each other. (E.g. don't read output from a different test.)
+  	\item[Repeatable] Tests should be runnable in every environment and produce the same results.
+	\item[Self-Validating] At the end of running your tests you need to have a boolean answer - pass or fail. If you need to compare some files passing becomes subjective.
+	\item[Timely] Tests should be written just before the production code. If written afterwards it might be hard to test the code.
+\end{description}
 
 \subsection{Classes}
 
