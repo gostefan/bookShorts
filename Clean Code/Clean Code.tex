@@ -257,15 +257,22 @@ Tests follow these rules:
 \end{description}
 
 \subsection{Classes}
+(At least in Java) classes should start with variables - public static first, private static second and private variables third. Public variables don't occurr typically (use getters and setters). You may loosen the rule that variables are private for tests (but not more visible than protected). But this is a last resort - try different approaches first.
 
+\paragraph{Single Responsibility Principle} Classes should be small (as functions) but not (necessarily) in numbers of line but in responsibilites it has. Don't write god classes. In general a good measure for this is that you're able to write a good description of a class with 25 words without using "if", "and", "or", or "but".
 
-\section{Case Studies}
+\paragraph{Cohesion} A function in a class is more cohesive if it accesses more of the class variables. A class is maximally cohesive if all functions access all of its variables. In general it's a good thing to strive for high cohesion but seldomly for maximal cohesion. But if cohesion get's low it is a sign that the class should be split up into two subclasses.
+
+\paragraph{Open-Closed Principle}
+A class should be open for extension (e.g. subclassing) while closed for modification (i.e. it should not be changed itself). This works both to isolate code from changes as well as to prepare for exactly such changes.
 
 \subsection{Systems}
 
 \subsection{Emergence}
 
 \subsection{Concurrency}
+
+\section{Case Studies}
 
 \subsection{Successive Refinement}
 
