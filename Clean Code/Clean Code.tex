@@ -298,6 +298,15 @@ If you have a powerful tool to separate concerns it's not necessary (and often h
 
 \subsection{Emergence}
 
+A design is "simple" if it follows these rules (in order of importance):
+\begin{description}
+	\item[Runs all the tests] A system must be testable/provable. Otherwise it should never be deployed.
+	\item[Contains no duplication] A clean system requires the will to eliminate duplication - even in the smallest/fewest lines of code.
+	\item[Expresses the intent of the programmer] The more expressive code gets the easier it is to maintain long term.
+	\item[Minimizes the number of classes and methods] Sometimes we overcomplicate things with too many classes, class hierarchies and functions. Therefore we should minimize their numbers - but not at cost of expressiveness.
+\end{description}
+The most important part here is that once we have test we can refactor without being scared of breaking something. This is why tests are the most important rule of simple designs.
+
 \subsection{Concurrency}
 
 \section{Case Studies}
