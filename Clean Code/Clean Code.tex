@@ -267,6 +267,34 @@ Tests follow these rules:
 A class should be open for extension (e.g. subclassing) while closed for modification (i.e. it should not be changed itself). This works both to isolate code from changes as well as to prepare for exactly such changes.
 
 \subsection{Systems}
+\paragraph{Separate system construction from usage} Do all the code that wires up different parts of your application with others in diifferent code parts from the actual program logic.
+
+For example the typical lazy initialization (\code{if (singleton == null) singleton = new ...}) hardwires \code{singleton} to whatever class comes behind \code{new}. In many cases this might be what you want and totally ok. But it limits flexibility because you need to change the code for application logic to wire \code{singleton} to a different class. It also introduces a dependency even if we don't instantiate this class on runtime.
+
+One way of achieving this is to move all aspects of construction to \code{main}. We build all the objects and pass them to the application before actually running the application.
+
+Another approach is to use interfaces and factories. Like this \code{main} creates the factories and passes these to the application. The application can then create its own (not hardwired) objects whenever it needs them.
+
+A third way to go is to use dependency injection (DI) which is the application of inversion of control (IoC) to dependency management.
+
+One half way implementation is to have a service that can resolve dependencies (e.g. \code{A result = service.get("myA");}). But like this the code still actively resolves the dependency (and thereby has an indirect dependency on the implementation class).
+
+In a full implementaiton a class would have setters for its dependencies and would assume the dependencies are resolved from outside the class before it's run.
+
+\paragraph{Scaling Up}
+It's in practice not possible to get systems right from the beginning. Therefore only implement todays stories and don't plan ahead for future work. It's better to refactor once you know what you'll need in the future. Otherwise you implement what you think you need in the future but you actually need something different.
+
+A short review of EJB2 follows and why it's far from perfect.
+
+Then there is a short explanation of how Java proxies work and why these also are a lot of boilerplate. But automatic tools can handle much of the boilerplate. If you're interested look at Spring AOP and JBoss AOP. EJB3 was developed in a similar fashion as Spring with XML configuration files and/or Java 5 annotations.
+
+The most full-featured tool for separating concerns is AspectJ. But it needs you to adopt new tools and learn new language constructs and idioms.
+
+If you have a powerful tool to separate concerns it's not necessary (and often harmful) to do a big design up front.
+
+\paragraph{Use standards wisely} Only use hyped standards if they add value to your team and program.
+
+\paragraph{Domain-Specific Langauges} Good DSLs make the domain specific concepts come as close as possible to the implementation code.
 
 \subsection{Emergence}
 
