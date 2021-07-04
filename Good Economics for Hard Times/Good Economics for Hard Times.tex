@@ -1,0 +1,148 @@
+\documentclass[a4paper, twocolumn]{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts} 
+\usepackage{color}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{graphics}
+\usepackage[pdftex]{hyperref}
+\usepackage{moreverb}
+
+\usepackage[novbox]{pdfsync}
+
+\usepackage[framemethod=tikz]{mdframed}
+\mdfdefinestyle{mystyle}{%
+  rightline=true,
+  innerleftmargin=10,
+  innerrightmargin=10,
+  outerlinewidth=3pt,
+  topline=false,
+  rightline=true,
+  bottomline=false,
+  skipabove=\topsep,
+  skipbelow=\topsep
+}
+
+\title{Summary: Good Economics for Hard Times \\
+	\large
+	Better Answers to Our Biggest Problems\\
+	Abhijit V. Banerjee \& Esther Duflo}
+\author{Stefan Götschi}
+
+% Commands
+
+\let\oldsubsection\subsection
+
+\newcounter{mysubsection}
+\renewcommand{\subsection}{
+    \stepcounter{mysubsection}
+    \oldsubsection
+}
+\renewcommand{\thesubsection}{\arabic{mysubsection}.}
+
+\definecolor{lightgrey}{rgb}{0.96,0.96,0.96}
+\newcommand{\code}[1]{\texttt{\color{black}{#1}}}
+\newcommand{\keyword}[1]{\textbf{\color{black}{#1}}}
+\newcommand{\example}[1]{\textbf{\medskip\colorbox{lightgrey}{\color{black}{Beispiel: #1}}}}
+
+\begin{document}
+\maketitle
+
+\section{MEGA: Make Economics Great Again}
+\begin{mdframed}[style=mystyle,frametitle=Core Message]
+Economists should not to just share their conclusions but also the thinking path to it.
+\end{mdframed}
+
+General standpoints/ideologies of people (e.g. gender roles) are better predictors of their policiy views than statistical data (e.g. income, home town, demographic group) \cite{hidden-tribes}. The most central topics are Immigration, trade, taxes, and the role of government.
+
+The broad population often disagrees with Economists \cite{eco-vs-american}. Even informing people about prominent economist's views doesn't change their opinion.
+
+Media often calls on the loudest economists. Sadly these are typically not the best but still drive public discourse.
+
+Economy is still a combination of intuition based in science, some guesswork aided by experience, and a bunch of pure trial and error. That means economists often get things wrong.
+
+All of these reasons lead to people not trusting economists. The only approach that helps here is if Economists explained their conclusions - The path there is at least equally important.
+
+In this book we shouldn't forget humans want more than money and consumer goods. They want a good life. This includes dignity, family, respect, lightness, pleasure, etc.
+
+\section{From the Mouth of the Shark}
+People have a wrong perception of migrants. They think there are more of them than there actually are, that immigrants are less educated, poorer more likely to be unemployed and welfare dependent than they actually are.
+
+The voting behavior doesn't change with fact checking politician's wrong claims.
+
+The logic that the labour market behaves like the free market is nice and easy. More labor supply means lower wages. But this fact is wrong as we will see.
+
+There is no evidence that even large influx of low-skilled immigrants hurt the local population.
+
+\subsection{Leaving Home}
+Immigrants don't come from the poorest countries in the world. People leave because they find it intolerable because everyday normality collapses.
+
+In years with bad harvests less people migrate because they can't afford it \cite{push-and-pull}.
+Bad years mean less people move because they can't afford it.
+
+Most people don't move just because they can earn more. (There are exceptions as always.) Neither do Indians move from the countryside to Delhi (which would double their income) nor did the Greeks emigrate massively while unemployment was at 27 percent in 2013-2014 \cite{greek-emigration}.
+
+\subsection{The Migration Lottery}
+With migration we focus on the wages of migrants and not on the reasons why they move. The \keyword{identification problem} describes that you cannot compare the migrants with the non-migrants from the same location. The migrants may take more risks, have more stamina, or other skills that would have made them successful even without migrating.
+
+To claim the difference in wages is caused by the difference in location and nothing else a connection between the cause and the effect have to be established without tainting factors.
+
+Visa lotteries allow for such comparison. In New Zealand it was found that migrants from Tonga tripled their wage \cite{new-zealand-lottery}. Indian software professionals make six times more money in the United States \cite{usa-lottery}.
+
+\subsection{Lava Bombs}
+A volcanic eruption in Iceland destroyed some buildings in a fishing village while other survived. It was possible to assume that nothing distinguished the people affected.
+
+Young people moving (typically with their parents) earned about \$3'000 more than those staying. This is mostly because they likely attended college and didn't become fishermen \cite{iceland-volcano}.
+
+After WWII in Finland a large number of Finns had to be evacuated as land had to be conceded to Russia. Twenty-five years after the move the displaced people tended to be richer. This was mostly because they were more mobile, in more urban regions and formally employed \cite{finland-ww2}.
+
+\subsection{Do They Know?}
+
+
+\subsection{Lift all the Boats?}
+
+
+\subsection{What's so Special about Immigrants?}
+
+
+\subsection{Workers and Watermelons}
+
+
+\subsection{The Skilled Set}
+
+
+\subsection{What Caravan?}
+
+
+\subsection{Without Connections}
+
+
+\subsection{The Comforts of Home}
+
+
+\subsection{Family Ties}
+
+
+\subsection{Sleepless in Kathmandu}
+
+
+\subsection{Risk versus Uncertainty}
+
+
+\subsection{Through a Glass Darkly}
+
+
+\subsection{After Tocqueville}
+
+
+\subsection{The Comeback Cities Tour}
+
+
+\subsection{Eisenhower and Stalin}
+
+
+\onecolumn{
+\bibliography{References}{}
+\bibliographystyle{alpha}
+}
+\end{document}
