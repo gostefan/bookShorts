@@ -33,13 +33,6 @@
 
 \let\oldsubsection\subsection
 
-\newcounter{mysubsection}
-\renewcommand{\subsection}{
-    \stepcounter{mysubsection}
-    \oldsubsection
-}
-\renewcommand{\thesubsection}{\arabic{mysubsection}.}
-
 \definecolor{lightgrey}{rgb}{0.96,0.96,0.96}
 \newcommand{\code}[1]{\texttt{\color{black}{#1}}}
 \newcommand{\keyword}[1]{\textbf{\color{black}{#1}}}
